@@ -22,3 +22,8 @@
 #footer p {
     margin-bottom: 0.5em;
 }
+
+/* Hibalista az űrlapok fölött */
+.box.message ul {
+    margin: 0;
+}

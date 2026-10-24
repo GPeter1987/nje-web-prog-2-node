@@ -3,11 +3,13 @@
     <div class="fields">
         <div class="field half">
             <label for="username">Felhasználónév</label>
-            <input type="text" name="username" id="username" required>
+            <input type="text" name="username" id="username" value="<%= username %>"
+                   required autocomplete="username">
         </div>
         <div class="field half">
             <label for="password">Jelszó</label>
-            <input type="password" name="password" id="password" required>
+            <input type="password" name="password" id="password"
+                   required autocomplete="current-password">
         </div>
     </div>
     <ul class="actions">
