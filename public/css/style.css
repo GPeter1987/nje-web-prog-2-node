@@ -14,3 +14,6 @@ nav a {
     font-weight: bold;
     margin-bottom: 15px;
 }
+nav a.active {
+    font-weight: bold;
+}

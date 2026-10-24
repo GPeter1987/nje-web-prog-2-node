@@ -1,14 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="hu">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>NB I.<% if (typeof title !== "undefined") { %> - <%= title %><% } %></title>
         <link rel="stylesheet" href="/css/style.css">
     </head>
     <body>
+        <%
+            // Menüpontok: show = ki látja (mindenki / bejelentkezett / admin / nem bejelentkezett)
+            const menu = [
+                { href: "/", label: "Főoldal", show: true },
+                { href: "/adatbazis", label: "Adatbázis", show: true },
+                { href: "/kapcsolat", label: "Kapcsolat", show: true },
+                { href: "/uzenetek", label: "Üzenetek", show: !!user },
+                { href: "/diagram", label: "Diagram", show: !!user },
+                { href: "/crud", label: "CRUD", show: !!user && user.role === "admin" },
+                { href: "/login", label: "Bejelentkezés", show: !user },
+                { href: "/register", label: "Regisztráció", show: !user }
+            ];
+        %>
         <nav>
-            <a href="/">Home</a>
-            <% if(user){ %><a href="/user">User</a> <% } %>
-            <% if(user && user.role=="admin"){ %><a href="/admin">Admin</a> <% } %>
-            <% if(!user){ %><a href="/login">Login</a> <a href="/register">Register</a> <% }else{ %>
-            <%= user.username %> <a href="/logout">Logout</a> <% } %>
+            <% menu.filter(item => item.show).forEach(item => { %>
+                <a href="<%= item.href %>" class="<%= currentPath === item.href ? "active" : "" %>"><%= item.label %></a>
+            <% }) %>
+            <% if (user) { %>
+                <span><%= user.username %><% if (user.role === "admin") { %> (admin)<% } %></span>
+                <a href="/logout">Kijelentkezés</a>
+            <% } %>
         </nav>
         <hr>

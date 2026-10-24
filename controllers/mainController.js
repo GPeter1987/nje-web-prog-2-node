@@ -2,8 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
 exports.homeIndex = (req, res) => { res.render("home"); };
-exports.userIndex = (req, res) => { res.render("user"); };
-exports.adminIndex = (req, res) => { res.render("admin"); };
 
 exports.registerGet = (req, res) => { res.render("register"); };
 exports.registerPost = async (req, res) => {
@@ -31,11 +29,7 @@ exports.loginPost = async (req, res) => {
         return res.redirect("/login");
     }
     req.session.user = { id: user._id, username: user.username, role: user.role };
-    if (user.role === "admin") {
-        res.redirect("/admin");
-    } else {
-        res.redirect("/user");
-    }
+    res.redirect("/");
 };
 exports.logout = (req, res) => {
     req.session.destroy(() => { res.redirect("/"); });

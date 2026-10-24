@@ -16,10 +16,15 @@ app.use(session({
 }));
 app.use((req, res, next) => {
     res.locals.user = req.session.user;
+    // Az aktuális útvonal, pl. a menüben az aktív pont kiemeléséhez
+    res.locals.currentPath = req.path;
     res.locals.message = req.session.message || "";
     req.session.message = "";
     next();
 });
-app.use("/", require("./routes/mainRouter"));
+app.use("/", require("./routes/mainRouter"));       // Főoldal, autentikáció
+app.use("/", require("./routes/messageRouter"));    // Kapcsolat, Üzenetek
+app.use("/", require("./routes/dataRouter"));       // Adatbázis, Diagram
+app.use("/crud", require("./routes/crudRouter"));   // CRUD (admin)
 const port = process.env.PORT || 3000;
 app.listen(port, () => {console.log(`Server: http://localhost:${port}`);});
