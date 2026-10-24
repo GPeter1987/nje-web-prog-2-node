@@ -1,0 +1,42 @@
+<%- include("partials/header") %>
+<%# Mezőnkénti hibaüzenetek: errors.<mező> (a Mongoose ValidationError-ból) %>
+<p>Kérdésed, észrevételed van az oldallal vagy az adatokkal kapcsolatban? Írj nekünk!
+    Az üzenetedet az oldal készítői kapják meg.</p>
+
+<% if (Object.keys(errors).length > 0) { %>
+<div class="box message">Az üzenetet nem sikerült elküldeni, javítsd a hibás mezőket.</div>
+<% } %>
+
+<form method="POST" action="/kapcsolat">
+    <div class="fields">
+        <div class="field half">
+            <label for="nev">Név</label>
+            <input type="text" name="nev" id="nev" value="<%= values.nev %>" maxlength="60"
+                   class="<%= errors.nev ? "invalid" : "" %>" required>
+            <% if (errors.nev) { %><span class="field-error"><%= errors.nev %></span><% } %>
+        </div>
+        <div class="field half">
+            <label for="email">E-mail cím</label>
+            <input type="email" name="email" id="email" value="<%= values.email %>" maxlength="100"
+                   class="<%= errors.email ? "invalid" : "" %>" required>
+            <% if (errors.email) { %><span class="field-error"><%= errors.email %></span><% } %>
+        </div>
+        <div class="field">
+            <label for="targy">Tárgy</label>
+            <input type="text" name="targy" id="targy" value="<%= values.targy %>" maxlength="100"
+                   class="<%= errors.targy ? "invalid" : "" %>" required>
+            <% if (errors.targy) { %><span class="field-error"><%= errors.targy %></span><% } %>
+        </div>
+        <div class="field">
+            <label for="uzenet">Üzenet</label>
+            <textarea name="uzenet" id="uzenet" rows="6" maxlength="2000"
+                      class="<%= errors.uzenet ? "invalid" : "" %>" required><%= values.uzenet %></textarea>
+            <% if (errors.uzenet) { %><span class="field-error"><%= errors.uzenet %></span><% } %>
+        </div>
+    </div>
+    <ul class="actions">
+        <li><input type="submit" value="Üzenet küldése" class="primary"></li>
+        <li><input type="reset" value="Törlés"></li>
+    </ul>
+</form>
+<%- include("partials/footer") %>

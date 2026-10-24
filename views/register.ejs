@@ -1,13 +1,27 @@
 <%- include("partials/header") %>
+<% if (errors.length > 0) { %>
+<div class="box message">
+    <ul>
+        <% errors.forEach(error => { %><li><%= error %></li><% }) %>
+    </ul>
+</div>
+<% } %>
 <form method="POST" action="/register">
     <div class="fields">
-        <div class="field half">
+        <div class="field">
             <label for="username">Felhasználónév</label>
-            <input type="text" name="username" id="username" required>
+            <input type="text" name="username" id="username" value="<%= username %>"
+                   required minlength="3" maxlength="30" autocomplete="username">
         </div>
         <div class="field half">
-            <label for="password">Jelszó</label>
-            <input type="password" name="password" id="password" required>
+            <label for="password">Jelszó (legalább 6 karakter)</label>
+            <input type="password" name="password" id="password"
+                   required minlength="6" maxlength="72" autocomplete="new-password">
+        </div>
+        <div class="field half">
+            <label for="passwordAgain">Jelszó újra</label>
+            <input type="password" name="passwordAgain" id="passwordAgain"
+                   required minlength="6" maxlength="72" autocomplete="new-password">
         </div>
     </div>
     <ul class="actions">

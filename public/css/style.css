@@ -22,3 +22,69 @@
 #footer p {
     margin-bottom: 0.5em;
 }
+
+/* Hibalista az űrlapok fölött */
+.box.message ul {
+    margin: 0;
+}
+
+/* Főoldal: a banner képe jobban látsszon (a téma alapból erősen elsötétíti) */
+#banner:after {
+    opacity: 0.65;
+}
+
+/* Főoldal: statisztika-dobozok */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5em;
+    margin-bottom: 2em;
+}
+.stat {
+    border: solid 1px rgba(212, 212, 255, 0.1);
+    padding: 1.5em 1em;
+    text-align: center;
+}
+.stat-value {
+    display: block;
+    font-size: 2em;
+    font-weight: 600;
+    color: #9bf1ff;
+    line-height: 1.2;
+}
+.stat-label {
+    font-size: 0.8em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+@media screen and (max-width: 980px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Főoldal: képforrások */
+.credits {
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+/* Űrlapok: mezőnkénti hibaüzenet és hibás mező kerete */
+.field-error {
+    display: block;
+    margin-top: 0.4em;
+    font-size: 0.85em;
+    color: #ec8d81;
+}
+/* (erősebb szelektor, mert a téma a böngésző szerint érvénytelen mezőnél kikapcsolja a keretet) */
+form .field input.invalid,
+form .field textarea.invalid {
+    box-shadow: inset 0 0 0 2px #ec8d81;
+}
+
+/* Üzenetek táblázat */
+.messages-table .nowrap {
+    white-space: nowrap;
+}
+.messages-table .message-text {
+    white-space: pre-line;   /* az üzenet sortörései megmaradnak */
+    min-width: 16em;
+}

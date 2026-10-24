@@ -1,26 +1,129 @@
 <%- include("partials/header") %>
-<%# A főoldal saját bannert rajzol (hero: true), a részletes tartalom az A3 feladat %>
+<%
+    const fmt = (n, digits = 0) => n.toLocaleString("hu-HU", { maximumFractionDigits: digits });
+    // Csempék a menüpontokra (a védett oldalak a látogatót a bejelentkezéshez irányítják)
+    const tiles = [
+        { href: "/adatbazis", title: "Adatbázis", text: "Klubok, posztok és játékosok egy helyen", img: "/images/tile-adatbazis.jpg", login: false },
+        { href: "/diagram", title: "Diagram", text: "Keretértékek és posztok grafikonon", img: "/images/tile-diagram.jpg", login: true },
+        { href: "/kapcsolat", title: "Kapcsolat", text: "Írj nekünk üzenetet", img: "/images/tile-kapcsolat.jpg", login: false },
+        { href: "/uzenetek", title: "Üzenetek", text: "A beküldött üzenetek listája", img: "/images/tile-uzenetek.jpg", login: true }
+    ];
+    // A képek forrása és licence (CC BY / CC BY-SA: a szerzőt és a licencet fel kell tüntetni)
+    const credits = [
+        { what: "Puskás Aréna", author: "OD Pictures", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Pusk%C3%A1s_Ar%C3%A9na_06.jpg" },
+        { what: "Groupama Aréna", author: "Michał Bulsa", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Groupama_Arena_Budapest.jpg" },
+        { what: "Nagyerdei Stadion", author: "Thaler Tamás", license: "CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:NagyerdeiStadionFotoThalerTamas3.jpg" },
+        { what: "Labda a gyepen", author: "Prakash Acharya", license: "CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Soccer_(122717889).jpeg" },
+        { what: "FTC–UTE szurkolók", author: "Fmvh", license: "CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:FTC-UTE-2013-03-10-1.jpg" },
+        { what: "Meccslabda", author: "Hayden Schiff", license: "CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:USF_at_UC_2019_-_game_ball_(48957905358).jpg" }
+    ];
+%>
 <section id="banner" class="major">
     <div class="inner">
         <header class="major">
-            <h1>NB I.</h1>
+            <h1>NB I. labdarúgó adatbázis</h1>
         </header>
         <div class="content">
-            <p>Az első osztályú labdarúgó-bajnokság klubjai és játékoskeretei</p>
+            <p>Az első osztályú labdarúgó-bajnokság klubjai,<br>
+            játékoskeretei és piaci értékei egy helyen.</p>
             <ul class="actions">
-                <li><a href="#one" class="button next scrolly">Tovább</a></li>
+                <li><a href="#one" class="button next scrolly">Fedezd fel</a></li>
             </ul>
         </div>
     </div>
 </section>
 
 <div id="main">
-    <section id="one">
+    <% if (message) { %>
+    <section>
         <div class="inner">
-            <% if (message) { %>
             <div class="box message"><%= message %></div>
+        </div>
+    </section>
+    <% } %>
+
+    <section id="one" class="tiles">
+        <% tiles.forEach(tile => { %>
+        <article>
+            <span class="image">
+                <img src="<%= tile.img %>" alt="<%= tile.title %>">
+            </span>
+            <header class="major">
+                <h3><a href="<%= tile.href %>" class="link"><%= tile.title %></a></h3>
+                <p><%= tile.text %><% if (tile.login && !user) { %> (bejelentkezés után)<% } %></p>
+            </header>
+        </article>
+        <% }) %>
+    </section>
+
+    <section id="two">
+        <div class="inner">
+            <header class="major">
+                <h2>A bajnokság számokban</h2>
+            </header>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-value"><%= stats.klubDb %></span>
+                    <span class="stat-label">klub</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value"><%= stats.jatekosDb %></span>
+                    <span class="stat-label">játékos a keretekben</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value"><%= fmt(stats.osszertek / 1000, 1) %> M€</span>
+                    <span class="stat-label">a keretek összértéke</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value"><%= stats.kulfoldiDb %></span>
+                    <span class="stat-label">külföldi állampolgár</span>
+                </div>
+            </div>
+            <% if (stats.legertekesebb) { const p = stats.legertekesebb; %>
+            <p>A legértékesebb játékos jelenleg
+                <strong><%= [p.vezeteknev, p.utonev].filter(Boolean).join(" ") %></strong>
+                (<%= p.klub ? p.klub.csapatnev : "" %>), akinek piaci értéke
+                <strong><%= fmt(p.ertek) %> ezer €</strong>.</p>
             <% } %>
-            <p>Ez a főoldal hamarosan bemutatja az alkalmazást.</p>
+        </div>
+    </section>
+
+    <section id="three" class="spotlights">
+        <section>
+            <a href="/adatbazis" class="image">
+                <img src="/images/spotlight-labda.jpg" alt="Meccslabda a gyepen" data-position="center center">
+            </a>
+            <div class="content">
+                <div class="inner">
+                    <header class="major">
+                        <h3>Az alkalmazásról</h3>
+                    </header>
+                    <p>Az alkalmazás a magyar labdarúgó NB I. tizenkét klubjának játékoskeretét mutatja be:
+                        mezszámokat, posztokat, születési dátumokat és a játékosok piaci értékét.
+                        A látogatók böngészhetik az adatbázist és üzenetet küldhetnek,
+                        a regisztrált felhasználók grafikonokon is elemezhetik az adatokat,
+                        az adminisztrátor pedig szerkesztheti a játékosok adatait.</p>
+                    <p>Felhasznált technológiák: Node.js, Express, MongoDB (Mongoose ODM), EJS, Chart.js,
+                        Render.com és MongoDB Atlas.</p>
+                    <ul class="actions">
+                        <% if (user) { %>
+                        <li><a href="/adatbazis" class="button">Irány az adatbázis</a></li>
+                        <% } else { %>
+                        <li><a href="/register" class="button primary">Regisztráció</a></li>
+                        <li><a href="/login" class="button">Bejelentkezés</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section id="credits">
+        <div class="inner">
+            <p class="credits">Képek: Wikimedia Commons –
+                <% credits.forEach((c, i) => { %><a href="<%= c.url %>"><%= c.what %></a> (<%= c.author %>, <%= c.license %>)<%= i < credits.length - 1 ? ", " : "." %>
+                <% }) %>
+            </p>
         </div>
     </section>
 </div>
