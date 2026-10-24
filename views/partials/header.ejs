@@ -1,32 +1,71 @@
+<%#
+    Közös fejléc a Forty témával (html5up.net/forty).
+    Használat egy oldalon:
+        controllerben: res.render("oldal", { title: "Oldal címe" })
+        nézetben: include partials/header, utána az oldal tartalma, végül include partials/footer
+    A header kiírja a címet (h1) és a flash üzenetet, a footer lezárja a tartalomterületet.
+    Saját bannert rajzoló oldal (főoldal): res.render("home", { hero: true }) - ekkor a header nem nyit tartalomterületet.
+%>
+<%
+    const hasHero = typeof hero !== "undefined" && hero;
+    const pageTitle = typeof title !== "undefined" ? title : "";
+    // Menüpontok: show = ki látja (mindenki / bejelentkezett / admin)
+    const menu = [
+        { href: "/", label: "Főoldal", show: true },
+        { href: "/adatbazis", label: "Adatbázis", show: true },
+        { href: "/kapcsolat", label: "Kapcsolat", show: true },
+        { href: "/uzenetek", label: "Üzenetek", show: !!user },
+        { href: "/diagram", label: "Diagram", show: !!user },
+        { href: "/crud", label: "CRUD", show: !!user && user.role === "admin" }
+    ];
+%>
 <!DOCTYPE html>
 <html lang="hu">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>NB I.<% if (typeof title !== "undefined") { %> - <%= title %><% } %></title>
+        <title>NB I.<% if (pageTitle) { %> - <%= pageTitle %><% } %></title>
+        <link rel="stylesheet" href="/assets/css/main.css">
+        <noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript>
         <link rel="stylesheet" href="/css/style.css">
     </head>
-    <body>
-        <%
-            // Menüpontok: show = ki látja (mindenki / bejelentkezett / admin / nem bejelentkezett)
-            const menu = [
-                { href: "/", label: "Főoldal", show: true },
-                { href: "/adatbazis", label: "Adatbázis", show: true },
-                { href: "/kapcsolat", label: "Kapcsolat", show: true },
-                { href: "/uzenetek", label: "Üzenetek", show: !!user },
-                { href: "/diagram", label: "Diagram", show: !!user },
-                { href: "/crud", label: "CRUD", show: !!user && user.role === "admin" },
-                { href: "/login", label: "Bejelentkezés", show: !user },
-                { href: "/register", label: "Regisztráció", show: !user }
-            ];
-        %>
-        <nav>
-            <% menu.filter(item => item.show).forEach(item => { %>
-                <a href="<%= item.href %>" class="<%= currentPath === item.href ? "active" : "" %>"><%= item.label %></a>
-            <% }) %>
-            <% if (user) { %>
-                <span><%= user.username %><% if (user.role === "admin") { %> (admin)<% } %></span>
-                <a href="/logout">Kijelentkezés</a>
+    <body class="is-preload">
+        <div id="wrapper">
+
+            <header id="header"<% if (hasHero) { %> class="alt"<% } %>>
+                <a href="/" class="logo"><strong>NB I.</strong> <span>labdarúgó adatbázis</span></a>
+                <nav>
+                    <a href="#menu">Menü</a>
+                </nav>
+            </header>
+
+            <nav id="menu">
+                <ul class="links">
+                    <% menu.filter(item => item.show).forEach(item => { %>
+                        <li><a href="<%= item.href %>" class="<%= currentPath === item.href ? "active" : "" %>"><%= item.label %></a></li>
+                    <% }) %>
+                </ul>
+                <ul class="actions stacked">
+                    <% if (user) { %>
+                        <li class="menu-user"><%= user.username %><% if (user.role === "admin") { %> (admin)<% } %></li>
+                        <li><a href="/logout" class="button fit">Kijelentkezés</a></li>
+                    <% } else { %>
+                        <li><a href="/login" class="button primary fit">Bejelentkezés</a></li>
+                        <li><a href="/register" class="button fit">Regisztráció</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+
+            <% if (!hasHero) { %>
+            <div id="main" class="alt">
+                <section>
+                    <div class="inner">
+                        <% if (pageTitle) { %>
+                        <header class="major">
+                            <h1><%= pageTitle %></h1>
+                        </header>
+                        <% } %>
+                        <% if (message) { %>
+                        <div class="box message"><%= message %></div>
+                        <% } %>
             <% } %>
-        </nav>
-        <hr>

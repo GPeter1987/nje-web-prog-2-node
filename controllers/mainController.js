@@ -1,9 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
-exports.homeIndex = (req, res) => { res.render("home"); };
+exports.homeIndex = (req, res) => { res.render("home", { hero: true }); };
 
-exports.registerGet = (req, res) => { res.render("register"); };
+exports.registerGet = (req, res) => { res.render("register", { title: "Regisztráció" }); };
 exports.registerPost = async (req, res) => {
     const existingUser = await User.findOne({ username: req.body.username });
     if (existingUser) {
@@ -16,7 +16,7 @@ exports.registerPost = async (req, res) => {
     res.redirect("/login");
 };
 
-exports.loginGet = (req, res) => { res.render("login"); };
+exports.loginGet = (req, res) => { res.render("login", { title: "Bejelentkezés" }); };
 exports.loginPost = async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
