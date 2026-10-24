@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "seed:atlas": "node seed.js .env.atlas"
   },
   "keywords": [],
   "author": "",

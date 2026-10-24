@@ -1,6 +1,8 @@
-// Az NB-1 adatbázis betöltése a data/ mappából: npm run seed
+// Az NB-1 adatbázis betöltése a data/ mappából:
+//   npm run seed        => .env (helyi MongoDB)
+//   npm run seed:atlas  => .env.atlas (MongoDB Atlas)
 // Előbb törli a három kollekciót, így többször is futtatható.
-require("dotenv").config();
+require("dotenv").config({ path: process.argv[2] || ".env" });
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
