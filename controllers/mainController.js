@@ -1,10 +1,28 @@
 const User = require("../models/User");
+const Klub = require("../models/Klub");
+const Labdarugo = require("../models/Labdarugo");
 const bcrypt = require("bcrypt");
 
 const PASSWORD_MIN = 6;
 const PASSWORD_MAX = 72; // a bcrypt csak az első 72 bájtot veszi figyelembe
 
-exports.homeIndex = (req, res) => { res.render("home", { hero: true }); };
+// Főoldal: néhány élő adat az NB-1 adatbázisból a bemutatóhoz
+exports.homeIndex = async (req, res) => {
+    const [klubDb, jatekosDb, ertekOsszesites, legertekesebb] = await Promise.all([
+        Klub.countDocuments(),
+        Labdarugo.countDocuments(),
+        Labdarugo.aggregate([{ $group: { _id: null, osszertek: { $sum: "$ertek" }, kulfoldi: { $sum: { $cond: ["$kulfoldi", 1, 0] } } } }]),
+        Labdarugo.findOne().sort({ ertek: -1 }).populate("klub").lean()
+    ]);
+    const stats = {
+        klubDb,
+        jatekosDb,
+        osszertek: ertekOsszesites.length ? ertekOsszesites[0].osszertek : 0, // euróezerben
+        kulfoldiDb: ertekOsszesites.length ? ertekOsszesites[0].kulfoldi : 0,
+        legertekesebb
+    };
+    res.render("home", { hero: true, stats });
+};
 
 // Szerver oldali validáció a regisztrációs űrlaphoz: hibaüzenetek tömbje (üres, ha minden rendben)
 const validateRegistration = (username, password, passwordAgain) => {
