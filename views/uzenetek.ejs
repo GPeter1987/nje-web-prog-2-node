@@ -1,0 +1,33 @@
+<%- include("partials/header") %>
+<% if (messages.length === 0) { %>
+<p>Még nem érkezett üzenet. Az első üzenetet a <a href="/kapcsolat">Kapcsolat</a> oldalon küldheted el.</p>
+<% } else { %>
+<p>A Kapcsolat űrlapon beküldött üzenetek, a legfrissebb elöl. Összesen: <strong><%= messages.length %></strong> üzenet.</p>
+<div class="table-wrapper">
+    <table class="alt messages-table">
+        <thead>
+            <tr>
+                <th>Küldés ideje</th>
+                <th>Név</th>
+                <th>E-mail</th>
+                <th>Tárgy</th>
+                <th>Üzenet</th>
+                <th>Küldő</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% messages.forEach(m => { %>
+            <tr>
+                <td class="nowrap"><%= formatDate(m.createdAt) %></td>
+                <td><%= m.nev %></td>
+                <td><a href="mailto:<%= m.email %>"><%= m.email %></a></td>
+                <td><%= m.targy %></td>
+                <td class="message-text"><%= m.uzenet %></td>
+                <td><%= m.felhasznalo ? m.felhasznalo.username : "látogató" %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<% } %>
+<%- include("partials/footer") %>

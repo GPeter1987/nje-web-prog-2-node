@@ -36,4 +36,18 @@ exports.kapcsolatPost = async (req, res) => {
     res.redirect("/kapcsolat");
 };
 
-exports.uzenetekIndex = (req, res) => { res.render("placeholder", { title: "Üzenetek" }); };
+// A küldés ideje magyar időben (a Render szervere UTC-ben fut, ezért kell az időzóna)
+const formatDate = (date) => date.toLocaleString("hu-HU", {
+    timeZone: "Europe/Budapest",
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit"
+});
+
+// Üzenetek menü: csak bejelentkezett felhasználó (a router isLoggedIn-nel védi)
+exports.uzenetekIndex = async (req, res) => {
+    const messages = await Message.find()
+        .sort({ createdAt: -1 })              // fordított időrend: a legfrissebb elöl
+        .populate("felhasznalo", "username")  // ha bejelentkezett felhasználó küldte
+        .lean();
+    res.render("uzenetek", { title: "Üzenetek", messages, formatDate });
+};

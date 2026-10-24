@@ -79,3 +79,12 @@ form .field input.invalid,
 form .field textarea.invalid {
     box-shadow: inset 0 0 0 2px #ec8d81;
 }
+
+/* Üzenetek táblázat */
+.messages-table .nowrap {
+    white-space: nowrap;
+}
+.messages-table .message-text {
+    white-space: pre-line;   /* az üzenet sortörései megmaradnak */
+    min-width: 16em;
+}
