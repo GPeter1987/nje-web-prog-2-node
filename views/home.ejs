@@ -1,4 +1,27 @@
 <%- include("partials/header") %>
-<h1>Home</h1>
-<p>Available to all visitors.</p>
+<%# A főoldal saját bannert rajzol (hero: true), a részletes tartalom az A3 feladat %>
+<section id="banner" class="major">
+    <div class="inner">
+        <header class="major">
+            <h1>NB I.</h1>
+        </header>
+        <div class="content">
+            <p>Az első osztályú labdarúgó-bajnokság klubjai és játékoskeretei</p>
+            <ul class="actions">
+                <li><a href="#one" class="button next scrolly">Tovább</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<div id="main">
+    <section id="one">
+        <div class="inner">
+            <% if (message) { %>
+            <div class="box message"><%= message %></div>
+            <% } %>
+            <p>Ez a főoldal hamarosan bemutatja az alkalmazást.</p>
+        </div>
+    </section>
+</div>
 <%- include("partials/footer") %>
