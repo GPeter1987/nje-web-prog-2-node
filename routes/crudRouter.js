@@ -12,4 +12,10 @@ router.get("/", controller.index);
 router.get("/create", controller.createGet);
 router.post("/create", controller.createPost);
 
+router.get("/edit/:id", controller.editGet);
+router.post("/edit/:id", controller.editPost);
+
+// DELETE - Labdarúgó törlése
+router.post("/delete/:id", controller.deletePost);
+
 module.exports = router;
