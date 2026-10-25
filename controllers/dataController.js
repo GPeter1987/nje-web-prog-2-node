@@ -26,4 +26,43 @@ exports.adatbazisIndex = async (req, res) => {
     }
 };
 
-exports.diagramIndex = (req, res) => { res.render("placeholder", { title: "Diagram" }); };
+exports.diagramIndex = async (req, res) => {
+    try {
+        // Labdarúgók számának összesítése klubonként
+        const eredmeny = await Labdarugo.aggregate([
+            {
+                $group: {
+                    _id: "$klub",
+                    letszam: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: "klub",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "klubAdatok"
+                }
+            },
+            { $unwind: "$klubAdatok" },
+            { $sort: { "klubAdatok.csapatnev": 1 } },
+            {
+                $project: {
+                    _id: 0,
+                    klubNev: "$klubAdatok.csapatnev",
+                    letszam: 1
+                }
+            }
+        ]);
+
+        res.render("diagram", {
+            title: "Diagram",
+            klubNevek: eredmeny.map(adat => adat.klubNev),
+            letszamok: eredmeny.map(adat => adat.letszam)
+        });
+
+    } catch (err) {
+        console.error("Diagram lekérdezési hiba:", err);
+        res.status(500).send("Hiba történt a diagram adatainak lekérdezésekor.");
+    }
+};
