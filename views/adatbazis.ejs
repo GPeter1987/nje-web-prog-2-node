@@ -1,0 +1,88 @@
+
+<%- include("partials/header") %>
+
+<h2>Klubok</h2>
+<p>Összesen: <%= klubok.length %> klub</p>
+
+<div class="table-wrapper">
+    <table class="alt">
+        <thead>
+            <tr>
+                <th>Csapat neve</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% klubok.forEach(klub => { %>
+                <tr>
+                    <td><%= klub.csapatnev %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<hr>
+
+<h2>Posztok</h2>
+<p>Összesen: <%= posztok.length %> poszt</p>
+
+<div class="table-wrapper">
+    <table class="alt">
+        <thead>
+            <tr>
+                <th>Poszt neve</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% posztok.forEach(poszt => { %>
+                <tr>
+                    <td><%= poszt.nev %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<hr>
+
+<h2>Labdarúgók</h2>
+<p>Összesen: <%= labdarugok.length %> labdarúgó</p>
+
+<div class="table-wrapper">
+    <table class="alt">
+        <thead>
+            <tr>
+                <th>Mezszám</th>
+                <th>Vezetéknév</th>
+                <th>Utónév</th>
+                <th>Klub</th>
+                <th>Poszt</th>
+                <th>Születési idő</th>
+                <th>Magyar</th>
+                <th>Külföldi</th>
+                <th>Érték (ezer €)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% labdarugok.forEach(jatekos => { %>
+                <tr>
+                    <td><%= jatekos.mezszam %></td>
+                    <td><%= jatekos.vezeteknev %></td>
+                    <td><%= jatekos.utonev %></td>
+                    <td><%= jatekos.klub ? jatekos.klub.csapatnev : "-" %></td>
+                    <td><%= jatekos.poszt ? jatekos.poszt.nev : "-" %></td>
+                    <td>
+                        <%= jatekos.szulido
+                            ? new Date(jatekos.szulido).toLocaleDateString("hu-HU")
+                            : "-" %>
+                    </td>
+                    <td><%= jatekos.magyar ? "Igen" : "Nem" %></td>
+                    <td><%= jatekos.kulfoldi ? "Igen" : "Nem" %></td>
+                    <td><%= jatekos.ertek %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<%- include("partials/footer") %>

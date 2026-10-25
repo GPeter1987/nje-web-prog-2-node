@@ -1,0 +1,63 @@
+
+<%- include("partials/header") %>
+
+<h2>Labdarúgók száma klubonként</h2>
+
+<p>
+    A diagram a MongoDB adatbázisban szereplő
+    labdarúgók számát mutatja klubonként.
+    Az adatokat MongoDB aggregate lekérdezéssel
+    összesítettük.
+</p>
+
+<div class="box">
+    <div style="position: relative; height: 450px;">
+        <canvas id="klubDiagram"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const klubNevek = <%- JSON.stringify(klubNevek).replace(/</g, "\\u003c") %>;
+    const letszamok = <%- JSON.stringify(letszamok) %>;
+
+    const ctx = document.getElementById("klubDiagram");
+
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: klubNevek,
+            datasets: [{
+                label: "Labdarúgók száma",
+                data: letszamok,
+                backgroundColor: "rgba(110, 170, 220, 0.7)",
+                borderColor: "rgba(110, 170, 220, 1)",
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: { color: "#ffffff" }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: "#ffffff",
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: { color: "#ffffff" }
+                }
+            }
+        }
+    });
+</script>
+
+<%- include("partials/footer") %>
