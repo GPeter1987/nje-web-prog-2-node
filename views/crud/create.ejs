@@ -1,0 +1,125 @@
+
+<%- include("../partials/header") %>
+
+<h2>Új labdarúgó felvétele</h2>
+
+<p>Az alábbi űrlapon új labdarúgót rögzíthetsz.</p>
+
+<% if (hibak.length > 0) { %>
+    <div class="box">
+        <h3>Hibás adatok</h3>
+        <ul>
+            <% hibak.forEach(hiba => { %>
+                <li><%= hiba %></li>
+            <% }) %>
+        </ul>
+    </div>
+<% } %>
+
+<form method="POST" action="/crud/create" class="crud-form">
+    <div class="row gtr-uniform">
+
+        <div class="col-6 col-12-small">
+            <label for="vezeteknev">Vezetéknév</label>
+            <input type="text" id="vezeteknev"
+                   name="vezeteknev"
+                   value="<%= adatok.vezeteknev || '' %>"
+                   required>
+        </div>
+
+        <div class="col-6 col-12-small">
+            <label for="utonev">Utónév</label>
+            <input type="text" id="utonev"
+                   name="utonev"
+                   value="<%= adatok.utonev || '' %>">
+        </div>
+
+        <div class="col-6 col-12-small">
+            <label for="mezszam">Mezszám</label>
+            <input type="number" id="mezszam"
+                    name="mezszam"
+                    min="<%= szabalyok.mezszamMin %>"
+                    max="<%= szabalyok.mezszamMax %>"
+                    step="1"
+                    value="<%= adatok.mezszam ?? '' %>"
+                    required>
+        </div>
+
+        <div class="col-6 col-12-small">
+            <label for="szulido">Születési idő</label>
+            <input type="date" id="szulido"
+                    name="szulido"
+                    min="<%= datumHatarok.min %>"
+                    max="<%= datumHatarok.max %>"
+                    value="<%= adatok.szulido || '' %>"
+                    required>
+        </div>
+
+        <div class="col-6 col-12-small">
+            <label for="klub">Klub</label>
+            <select id="klub" name="klub" required>
+                <option value="">Válassz klubot</option>
+                <% klubok.forEach(klub => { %>
+                    <option value="<%= klub._id %>"
+                        <%= String(adatok.klub || '') === String(klub._id) ? 'selected' : '' %>>
+                        <%= klub.csapatnev %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="col-6 col-12-small">
+            <label for="poszt">Poszt</label>
+            <select id="poszt" name="poszt" required>
+                <option value="">Válassz posztot</option>
+                <% posztok.forEach(poszt => { %>
+                    <option value="<%= poszt._id %>"
+                        <%= String(adatok.poszt || '') === String(poszt._id) ? 'selected' : '' %>>
+                        <%= poszt.nev %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="col-12">
+            <label for="ertek">Érték (ezer €)</label>
+            <input type="number" id="ertek"
+                    name="ertek"
+                    min="<%= szabalyok.ertekMin %>"
+                    max="<%= szabalyok.ertekMax %>"
+                    step="1"
+                    value="<%= adatok.ertek ?? '' %>"
+                    required>
+        </div>
+
+        <div class="col-6 col-12-small">
+            <input type="checkbox" id="magyar"
+                   name="magyar"
+                   <%= adatok.magyar ? 'checked' : '' %>>
+            <label for="magyar">Magyar</label>
+        </div>
+
+        <div class="col-6 col-12-small">
+            <input type="checkbox" id="kulfoldi"
+                   name="kulfoldi"
+                   <%= adatok.kulfoldi ? 'checked' : '' %>>
+            <label for="kulfoldi">Külföldi</label>
+        </div>
+
+        <div class="col-12">
+            <ul class="actions">
+                <li>
+                    <button type="submit" class="primary">
+                        Mentés
+                    </button>
+                </li>
+                <li>
+                    <a href="/crud" class="button">Vissza</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</form>
+
+<%- include("../partials/footer") %>

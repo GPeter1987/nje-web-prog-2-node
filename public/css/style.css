@@ -22,3 +22,33 @@
 #footer p {
     margin-bottom: 0.5em;
 }
+
+/* CRUD - szám- és dátummezők megjelenése */
+.crud-form input[type="number"],
+.crud-form input[type="date"] {
+    background-color: rgba(212, 212, 255, 0.035);
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff;
+    border: 1px solid rgba(212, 212, 255, 0.1);
+    border-radius: 0;
+    padding: 0 1em;
+    height: 2.75em;
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    color-scheme: dark;
+}
+
+/* CRUD - aktív mező */
+.crud-form input[type="number"]:focus,
+.crud-form input[type="date"]:focus {
+    border-color: #9bf1ff;
+    outline: none;
+    box-shadow: 0 0 0 1px #9bf1ff;
+}
+
+/* CRUD - dátumválasztó ikon */
+.crud-form input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
