@@ -18,8 +18,11 @@ app.use((req, res, next) => {
     res.locals.user = req.session.user;
     // Az aktuális útvonal, pl. a menüben az aktív pont kiemeléséhez
     res.locals.currentPath = req.path;
+    // Egyszer használatos (flash) üzenet: kiolvassuk, majd töröljük.
+    // Csak akkor nyúlunk a sessionhöz, ha van üzenet, különben minden látogatónak
+    // elmentődne egy üres session az adatbázisba (saveUninitialized: false ellenére).
     res.locals.message = req.session.message || "";
-    req.session.message = "";
+    if (req.session.message) { delete req.session.message; }
     next();
 });
 app.use("/", require("./routes/mainRouter"));       // Főoldal, autentikáció

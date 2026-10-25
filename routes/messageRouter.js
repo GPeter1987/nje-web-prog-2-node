@@ -3,5 +3,6 @@ const controller = require("../controllers/messageController");
 const { isLoggedIn } = require("../middleware/auth");
 
 router.get("/kapcsolat", controller.kapcsolatGet);
+router.post("/kapcsolat", controller.kapcsolatPost);
 router.get("/uzenetek", isLoggedIn, controller.uzenetekIndex);
 module.exports = router;
